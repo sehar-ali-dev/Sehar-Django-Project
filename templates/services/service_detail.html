@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ service.name }} - MindCare Healthcare Platform{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/services/">Services</a></li>
+                    <li class="breadcrumb-item"><a href="/services/category/{{ service.category.slug }}/">{{ service.category.name }}</a></li>
+                    <li class="breadcrumb-item active">{{ service.name }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h1 class="mb-0">{{ service.name }}</h1>
+                        {% if service.is_featured %}
+                            <span class="badge bg-warning text-dark">Featured</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <span class="badge bg-primary">{{ service.category.name }}</span>
+                        {% if service.status == 'active' %}
+                            <span class="badge bg-success">Available</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Unavailable</span>
+                        {% endif %}
+                    </div>
+                    
+                    {% if service.service_image %}
+                        <img src="{{ service.service_image.url }}" class="img-fluid rounded mb-4" alt="{{ service.name }}">
+                    {% endif %}
+                    
+                    <h3>Description</h3>
+                    <p class="lead">{{ service.short_description }}</p>
+                    <p>{{ service.detailed_description|linebreaks }}</p>
+                    
+                    <hr>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h4>Service Details</h4>
+                            <table class="table">
+                                <tr>
+                                    <td><strong>Price:</strong></td>
+                                    <td class="text-primary fw-bold">${{ service.price }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Duration:</strong></td>
+                                    <td>{{ service.duration_minutes }} minutes</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Category:</strong></td>
+                                    <td>{{ service.category.name }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Quick Actions</h4>
+                            <a href="/contact/" class="btn btn-primary w-100 mb-2">Book Appointment</a>
+                            <a href="/services/" class="btn btn-outline-secondary w-100">Back to Services</a>
+                        </div>
+                    </div>
+                    
+                    {% if service.requirements %}
+                        <div class="alert alert-info">
+                            <h5>Requirements</h5>
+                            <p>{{ service.requirements|linebreaks }}</p>
+                        </div>
+                    {% endif %}
+                    
+                    {% if service.what_to_expect %}
+                        <div class="alert alert-secondary">
+                            <h5>What to Expect</h5>
+                            <p>{{ service.what_to_expect|linebreaks }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Service Information</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Category:</strong> {{ service.category.name }}</p>
+                    <p><strong>Price:</strong> ${{ service.price }}</p>
+                    <p><strong>Duration:</strong> {{ service.duration_minutes }} minutes</p>
+                    <p><strong>Status:</strong> {{ service.get_status_display }}</p>
+                </div>
+            </div>
+            
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Need Assistance?</h5>
+                </div>
+                <div class="card-body">
+                    <p>Have questions about this service? Our team is here to help.</p>
+                    <a href="/contact/" class="btn btn-outline-primary w-100">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

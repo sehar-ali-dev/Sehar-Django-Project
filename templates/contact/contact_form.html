@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us - MindCare Healthcare Platform{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active">Contact Us</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Send us a Message</h5>
+                </div>
+                <div class="card-body p-5">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Name *</label>
+                                <input type="text" class="form-control" id="name" name="name" value="{{ name|default:'' }}" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email *</label>
+                                <input type="email" class="form-control" id="email" name="email" value="{{ email|default:'' }}" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" value="{{ phone|default:'' }}">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="inquiry_type" class="form-label">Inquiry Type *</label>
+                            <select class="form-control" id="inquiry_type" name="inquiry_type" required>
+                                <option value="">Select inquiry type</option>
+                                <option value="general" {% if inquiry_type == 'general' %}selected{% endif %}>General Inquiry</option>
+                                <option value="appointment" {% if inquiry_type == 'appointment' %}selected{% endif %}>Appointment Request</option>
+                                <option value="billing" {% if inquiry_type == 'billing' %}selected{% endif %}>Billing Question</option>
+                                <option value="technical" {% if inquiry_type == 'technical' %}selected{% endif %}>Technical Support</option>
+                                <option value="feedback" {% if inquiry_type == 'feedback' %}selected{% endif %}>Feedback</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Subject *</label>
+                            <input type="text" class="form-control" id="subject" name="subject" value="{{ subject|default:'' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message *</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" required>{{ message|default:'' }}</textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="privacy_consent" name="privacy_consent" required>
+                                <label class="form-check-label" for="privacy_consent">
+                                    I consent to the privacy policy and data handling practices *
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="data_processing_consent" name="data_processing_consent" required>
+                                <label class="form-check-label" for="data_processing_consent">
+                                    I consent to the processing of my personal data *
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info small">
+                            <strong>HIPAA Notice:</strong> Your information will be handled according to healthcare privacy standards and will not be shared with third parties without your consent.
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Contact Information</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Email:</strong> info@mindcare.com</p>
+                    <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+                    <p><strong>Address:</strong> 123 Healthcare Ave, Medical City</p>
+                </div>
+            </div>
+            
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Office Hours</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Monday - Friday:</strong> 8:00 AM - 6:00 PM</p>
+                    <p><strong>Saturday:</strong> 9:00 AM - 2:00 PM</p>
+                    <p><strong>Sunday:</strong> Closed</p>
+                    <p class="text-muted small">For emergencies, please call our 24/7 hotline.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Newsletter - MindCare Healthcare Platform{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Subscribe to Our Newsletter</h5>
+                </div>
+                <div class="card-body p-5">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <p class="mb-4">Stay updated with the latest healthcare tips, medical news, and wellness information from MindCare.</p>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address *</label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ email|default:'' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name (Optional)</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ name|default:'' }}">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="privacy_consent" name="privacy_consent" required>
+                                <label class="form-check-label" for="privacy_consent">
+                                    I consent to the privacy policy *
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="marketing_consent" name="marketing_consent">
+                                <label class="form-check-label" for="marketing_consent">
+                                    I would like to receive promotional updates and offers
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info small">
+                            <strong>Privacy Notice:</strong> Your email will be used only for newsletter purposes. You can unsubscribe at any time.
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg w-100">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
