@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}Patient Dashboard - MindCare Healthcare Platform{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active">Patient Dashboard</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Welcome, {{ user.first_name|default:user.username }}!</h1>
+            <p class="lead mb-4">Your Mental Health Dashboard</p>
+        </div>
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="row">
+        <!-- Medical History Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Medical History</h5>
+                    <a href="{% url 'patients:medical_history_list' %}" class="btn btn-sm btn-light">View All</a>
+                </div>
+                <div class="card-body">
+                    {% if medical_histories %}
+                        <ul class="list-group list-group-flush">
+                            {% for history in medical_histories %}
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>{{ history.condition_name }}</strong>
+                                            <br>
+                                            <small class="text-muted">Diagnosed: {{ history.diagnosis_date|date:"M d, Y" }}</small>
+                                        </div>
+                                        <span class="badge bg-{{ 'success' if history.status == 'in_remission' else 'warning' if history.status == 'active' else 'secondary' }}">
+                                            {{ history.get_status_display }}
+                                        </span>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted mb-0">No medical history recorded.</p>
+                        <a href="{% url 'patients:medical_history_add' %}" class="btn btn-primary btn-sm mt-2">Add Medical History</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Records Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Recent Medical Records</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_records %}
+                        <ul class="list-group list-group-flush">
+                            {% for record in recent_records %}
+                                <li class="list-group-item">
+                                    <div>
+                                        <strong>{{ record.doctor_name }}</strong>
+                                        <br>
+                                        <small class="text-muted">{{ record.visit_date|date:"M d, Y H:i" }}</small>
+                                        <br>
+                                        <small>{{ record.mental_health_diagnosis|truncatewords:10 }}</small>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted mb-0">No recent medical records.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Documents Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Patient Documents</h5>
+                    <a href="{% url 'patients:document_upload' %}" class="btn btn-sm btn-light">Upload</a>
+                </div>
+                <div class="card-body">
+                    {% if recent_documents %}
+                        <ul class="list-group list-group-flush">
+                            {% for document in recent_documents %}
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>{{ document.document_title }}</strong>
+                                            <br>
+                                            <small class="text-muted">{{ document.get_document_type_display }}</small>
+                                            <br>
+                                            <small class="text-muted">{{ document.uploaded_at|date:"M d, Y" }}</small>
+                                        </div>
+                                        <a href="{{ document.file.url }}" class="btn btn-sm btn-outline-primary" download>Download</a>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted mb-0">No documents uploaded.</p>
+                        <a href="{% url 'patients:document_upload' %}" class="btn btn-primary btn-sm mt-2">Upload Document</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Insurance Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Insurance Information</h5>
+                    <a href="{% url 'patients:profile_edit' %}" class="btn btn-sm btn-dark">Edit</a>
+                </div>
+                <div class="card-body">
+                    {% if insurance_info %}
+                        <p><strong>Provider:</strong> {{ insurance_info.provider_name }}</p>
+                        <p><strong>Policy Number:</strong> {{ insurance_info.policy_number }}</p>
+                        <p><strong>Copay:</strong> ${{ insurance_info.copay_amount }}</p>
+                        <p><strong>Expiry:</strong> {{ insurance_info.expiry_date|date:"M d, Y" }}</p>
+                        <p>
+                            <span class="badge bg-{{ 'success' if insurance_info.is_active else 'secondary' }}">
+                                {{ 'Active' if insurance_info.is_active else 'Inactive' }}
+                            </span>
+                        </p>
+                    {% else %}
+                        <p class="text-muted mb-0">No insurance information on file.</p>
+                        <a href="{% url 'patients:profile_edit' %}" class="btn btn-primary btn-sm mt-2">Add Insurance</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

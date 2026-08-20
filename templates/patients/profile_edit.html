@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Profile - MindCare Healthcare Platform{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'patients:dashboard' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Edit Profile</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Edit Profile & Insurance</h1>
+        </div>
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="row">
+        <div class="col-md-8">
+            <form method="post">
+                {% csrf_token %}
+                
+                <!-- Patient Profile Section -->
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Patient Profile</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <label for="{{ profile_form.blood_group.id_for_label }}" class="form-label">{{ profile_form.blood_group.label }}</label>
+                            {{ profile_form.blood_group }}
+                            {% if profile_form.blood_group.errors %}
+                                <div class="text-danger">{{ profile_form.blood_group.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ profile_form.allergies.id_for_label }}" class="form-label">{{ profile_form.allergies.label }}</label>
+                            {{ profile_form.allergies }}
+                            {% if profile_form.allergies.errors %}
+                                <div class="text-danger">{{ profile_form.allergies.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ profile_form.chronic_conditions.id_for_label }}" class="form-label">{{ profile_form.chronic_conditions.label }}</label>
+                            {{ profile_form.chronic_conditions }}
+                            {% if profile_form.chronic_conditions.errors %}
+                                <div class="text-danger">{{ profile_form.chronic_conditions.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ profile_form.current_medications.id_for_label }}" class="form-label">{{ profile_form.current_medications.label }}</label>
+                            {{ profile_form.current_medications }}
+                            {% if profile_form.current_medications.errors %}
+                                <div class="text-danger">{{ profile_form.current_medications.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Insurance Information Section -->
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">Insurance Information</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <label for="{{ insurance_form.provider_name.id_for_label }}" class="form-label">{{ insurance_form.provider_name.label }}</label>
+                            {{ insurance_form.provider_name }}
+                            {% if insurance_form.provider_name.errors %}
+                                <div class="text-danger">{{ insurance_form.provider_name.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ insurance_form.policy_number.id_for_label }}" class="form-label">{{ insurance_form.policy_number.label }}</label>
+                            {{ insurance_form.policy_number }}
+                            {% if insurance_form.policy_number.errors %}
+                                <div class="text-danger">{{ insurance_form.policy_number.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ insurance_form.mental_health_coverage_details.id_for_label }}" class="form-label">{{ insurance_form.mental_health_coverage_details.label }}</label>
+                            {{ insurance_form.mental_health_coverage_details }}
+                            {% if insurance_form.mental_health_coverage_details.errors %}
+                                <div class="text-danger">{{ insurance_form.mental_health_coverage_details.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ insurance_form.copay_amount.id_for_label }}" class="form-label">{{ insurance_form.copay_amount.label }}</label>
+                            {{ insurance_form.copay_amount }}
+                            {% if insurance_form.copay_amount.errors %}
+                                <div class="text-danger">{{ insurance_form.copay_amount.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ insurance_form.expiry_date.id_for_label }}" class="form-label">{{ insurance_form.expiry_date.label }}</label>
+                            {{ insurance_form.expiry_date }}
+                            {% if insurance_form.expiry_date.errors %}
+                                <div class="text-danger">{{ insurance_form.expiry_date.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                {{ insurance_form.is_active }}
+                                <label for="{{ insurance_form.is_active.id_for_label }}" class="form-check-label">{{ insurance_form.is_active.label }}</label>
+                            </div>
+                            {% if insurance_form.is_active.errors %}
+                                <div class="text-danger">{{ insurance_form.is_active.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a href="{% url 'patients:dashboard' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
